@@ -42,6 +42,19 @@
         return result;
     };
 
+    var getFieldIndex = function (columns, field) {
+        var index = -1;
+
+        $.each(columns, function (i, column) {
+            if (column.field === field) {
+                index = i;
+                return false;
+            }
+            return true;
+        });
+        return index;
+    };
+
     // http://jsfiddle.net/wenyi/47nz7ez9/3/
     var setFieldIndex = function (columns) {
         var i, j, k,
@@ -273,7 +286,6 @@
         sortName: undefined,
         sortOrder: 'asc',
         sortStable: false,
-        rememberOrder: false,
         striped: false,
         columns: [[]],
         data: [],
@@ -327,9 +339,6 @@
         detailView: false,
         detailFormatter: function (index, row) {
             return '';
-        },
-        detailFilter: function (index, row) {
-            return true;
         },
         trimOnSearch: true,
         clickToSelect: false,
@@ -588,7 +597,7 @@
             '<div class="bootstrap-table">',
             '<div class="fixed-table-toolbar"></div>',
             this.options.paginationVAlign === 'top' || this.options.paginationVAlign === 'both' ?
-                '<div class="fixed-table-pagination" style="clear: both;"></div>' :
+                '<span class="fixed-table-pagination" style="clear: both;"></span>' :
                 '',
             '<div class="fixed-table-container">',
             '<div class="fixed-table-header"><table></table></div>',
@@ -658,7 +667,6 @@
         }
         this.options.columns = $.extend(true, [], columns, this.options.columns);
         this.columns = [];
-        this.fieldsColumnsIndex = [];
 
         setFieldIndex(this.options.columns);
         $.each(this.options.columns, function (i, columns) {
@@ -667,7 +675,6 @@
 
                 if (typeof column.fieldIndex !== 'undefined') {
                     that.columns[column.fieldIndex] = column;
-                    that.fieldsColumnsIndex[column.field] = column.fieldIndex;
                 }
 
                 that.options.columns[i][j] = column;
@@ -931,7 +938,7 @@
         if (index !== -1) {
             if (this.options.sortStable) {
                 $.each(this.data, function (i, row) {
-                    row._position = i;
+                    if (!row.hasOwnProperty('_position')) row._position = i;
                 });
             }
 
@@ -944,9 +951,6 @@
                     value = calculateObjectValue(that.header, that.header.sorters[index], [aa, bb]);
 
                 if (value !== undefined) {
-                    if (that.options.sortStable && value === 0) {
-                        return a._position - b._position;
-                    }
                     return order * value;
                 }
 
@@ -961,7 +965,6 @@
                 if (that.options.sortStable && aa === bb) {
                     aa = a._position;
                     bb = b._position;
-                    return a._position - b._position;
                 }
 
                 // IF both values are numeric, do a numeric comparison
@@ -1014,13 +1017,7 @@
             this.options.sortOrder = this.options.sortOrder === 'asc' ? 'desc' : 'asc';
         } else {
             this.options.sortName = $this.data('field');
-            if (this.options.rememberOrder) {
-                this.options.sortOrder = $this.data('order') === 'asc' ? 'desc' : 'asc';
-            } else {
-                this.options.sortOrder = this.options.columns[0].filter(function(option) {
-                    return option.field === $this.data('field');
-                })[0].order;
-            }
+            this.options.sortOrder = $this.data('order') === 'asc' ? 'desc' : 'asc';
         }
         this.trigger('sort', this.options.sortName, this.options.sortOrder);
 
@@ -1101,11 +1098,10 @@
                 '<button type="button" aria-label="columns" class="btn' +
                 sprintf(' btn-%s', this.options.buttonsClass) +
                 sprintf(' btn-%s', this.options.iconSize) +
-                ' dropdown-toggle" data-toggle="dropdown">',
-                sprintf('<i class="%s %s"></i>', this.options.iconsPrefix, this.options.icons.columns),
+                ' dropdown-toggle" data-toggle="dropdown"> Columns',
                 ' <span class="caret"></span>',
                 '</button>',
-                '<ul class="dropdown-menu" role="menu">');
+                '<ul class="dropdown-menu" role="menu"> <li class="dropdown-header"><input type="text" id="search-text" /></li>');
 
             $.each(this.columns, function (i, column) {
                 if (column.radio || column.checkbox) {
@@ -1119,7 +1115,12 @@
                 var checked = column.visible ? ' checked="checked"' : '';
 
                 if (column.switchable) {
-                    html.push(sprintf('<li role="menuitem">' +
+                  if(column.columnHeader){
+                    html.push(sprintf('<li role="separator" class="divider"></li><li class="dropdown-header">' +
+                        '<label>%s</label>' +
+                        '</li>', column.columnHeader));
+                  }
+                    html.push(sprintf('<li role="menuitem" class="menu-items-bs-table">' +
                         '<label><input type="checkbox" data-field="%s" value="%s"%s> %s</label>' +
                         '</li>', column.field, i, checked, column.title));
                     switchableCount++;
@@ -1261,7 +1262,7 @@
                     }
 
                     var key = $.isNumeric(that.header.fields[j]) ? parseInt(that.header.fields[j], 10) : that.header.fields[j];
-                    var column = that.columns[that.fieldsColumnsIndex[key]];
+                    var column = that.columns[getFieldIndex(that.columns, key)];
                     var value;
 
                     if (typeof key === 'string') {
@@ -1661,15 +1662,11 @@
         }
 
         if (!this.options.cardView && this.options.detailView) {
-            html.push('<td>');
-
-            if (calculateObjectValue(null, this.options.detailFilter, [i, item])) {
-                html.push('<a class="detail-icon" href="javascript:">',
+            html.push('<td>',
+                '<a class="detail-icon" href="#">',
                 sprintf('<i class="%s %s"></i>', this.options.iconsPrefix, this.options.icons.detailOpen),
-                '</a>');
-            }
-
-            html.push('</td>');
+                '</a>',
+                '</td>');
         }
 
         $.each(this.header.fields, function(j, field) {
@@ -1687,9 +1684,7 @@
                 column = that.columns[j];
 
             if (that.fromHtml && typeof value_ === 'undefined') {
-                if((!column.checkbox) && (!column.radio)) {
-                    return;
-                }
+                return;
             }
 
             if (!column.visible) {
@@ -1856,7 +1851,7 @@
                 index = $td[0].cellIndex,
                 fields = that.getVisibleFields(),
                 field = fields[that.options.detailView && !that.options.cardView ? index - 1 : index],
-                column = that.columns[that.fieldsColumnsIndex[field]],
+                column = that.columns[getFieldIndex(that.columns, field)],
                 value = getItemField(item, field, that.options.escape);
 
             if ($td.find('.detail-icon').length) {
@@ -2161,6 +2156,7 @@
             .html('').attr('class', this.$el.attr('class'))
             .append(this.$header_);
 
+
         focusedTemp = $('.focus-temp:visible:eq(0)');
         if (focusedTemp.length > 0) {
             focusedTemp.focus();
@@ -2193,9 +2189,16 @@
 
             $th.find('.fht-cell').width($this.innerWidth());
         });
+        // horizontal scroll event
+        // TODO: it's probably better improving the layout than binding to scroll event
+        this.$tableBody.off('scroll').on('scroll', function () {
+            that.$tableHeader.scrollLeft($(this).scrollLeft());
 
-        this.horizontalScroll();
-        this.trigger('post-header');
+            if (that.options.showFooter && !that.options.cardView) {
+                that.$tableFooter.scrollLeft($(this).scrollLeft());
+            }
+        });
+        that.trigger('post-header');
     };
 
     BootstrapTable.prototype.resetFooter = function () {
@@ -2283,23 +2286,6 @@
 
             $footerTd.eq(i).find('.fht-cell').width($this.innerWidth());
         });
-
-        this.horizontalScroll();
-    };
-
-    BootstrapTable.prototype.horizontalScroll = function () {
-        var that = this;
-        // horizontal scroll event
-        // TODO: it's probably better improving the layout than binding to scroll event
-        this.$tableBody.off('scroll').on('scroll', function () {
-            if (that.options.showHeader && that.options.height) {
-              that.$tableHeader.scrollLeft($(this).scrollLeft());
-            }
-
-            if (that.options.showFooter && !that.options.cardView) {
-                that.$tableFooter.scrollLeft($(this).scrollLeft());
-            }
-        });
     };
 
     BootstrapTable.prototype.toggleColumn = function (index, checked, needUpdate) {
@@ -2330,7 +2316,7 @@
             visibleFields = [];
 
         $.each(this.header.fields, function (j, field) {
-            var column = that.columns[that.fieldsColumnsIndex[field]];
+            var column = that.columns[getFieldIndex(that.columns, field)];
 
             if (!column.visible) {
                 return;
@@ -2555,7 +2541,7 @@
         if (!params.hasOwnProperty('index') || !params.hasOwnProperty('row')) {
             return;
         }
-        this.options.data.splice(params.index, 0, params.row);
+        this.data.splice(params.index, 0, params.row);
         this.initSearch();
         this.initPagination();
         this.initSort();
@@ -2822,17 +2808,17 @@
         if (this.options.showHeader && this.options.height) {
             this.fitHeader();
         }
-        if (this.options.showFooter && !that.options.cardView) {
+        if (this.options.showFooter) {
             this.fitFooter();
         }
     };
 
     BootstrapTable.prototype.showColumn = function (field) {
-        this.toggleColumn(this.fieldsColumnsIndex[field], true, true);
+        this.toggleColumn(getFieldIndex(this.columns, field), true, true);
     };
 
     BootstrapTable.prototype.hideColumn = function (field) {
-        this.toggleColumn(this.fieldsColumnsIndex[field], false, true);
+        this.toggleColumn(getFieldIndex(this.columns, field), false, true);
     };
 
     BootstrapTable.prototype.getHiddenColumns = function () {
@@ -3095,6 +3081,7 @@
     $.fn.bootstrapTable.methods = allowedMethods;
     $.fn.bootstrapTable.utils = {
         sprintf: sprintf,
+        getFieldIndex: getFieldIndex,
         compareObjects: compareObjects,
         calculateObjectValue: calculateObjectValue,
         getItemField: getItemField,
