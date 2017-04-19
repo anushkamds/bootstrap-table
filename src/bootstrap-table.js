@@ -1373,28 +1373,6 @@
                 }
             }
 
-            if (this.totalPages >= 6) {
-                if (this.options.pageNumber >= 3) {
-                    html.push('<li class="page-first' + (1 === this.options.pageNumber ? ' active' : '') + '">',
-                        '<a href="#">', 1, '</a>',
-                        '</li>');
-
-                    from++;
-                }
-
-                if (this.options.pageNumber >= 4) {
-                    if (this.options.pageNumber == 4 || this.totalPages == 6 || this.totalPages == 7) {
-                        from--;
-                    } else {
-                        html.push('<li class="page-first-separator disabled">',
-                            '<a href="#">...</a>',
-                            '</li>');
-                    }
-
-                    to--;
-                }
-            }
-
             if (this.totalPages >= 7) {
                 if (this.options.pageNumber >= (this.totalPages - 2)) {
                     from--;

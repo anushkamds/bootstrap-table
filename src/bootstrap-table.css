@@ -189,7 +189,7 @@
 }
 
 .fixed-table-toolbar .columns label {
-    /*display: block;*/
+    display: block;
     padding: 3px 20px;
     clear: both;
     font-weight: normal;
@@ -308,5 +308,6 @@ div.fixed-table-scroll-outer {
 /* for get correct heights  */
 .fixed-table-toolbar:after, .fixed-table-pagination:after {
     content: "";
+    display: block;
     clear: both;
 }
