@@ -595,11 +595,11 @@
     BootstrapTable.prototype.initContainer = function () {
         this.$container = $([
             '<div class="bootstrap-table">',
-            '<div class="fixed-table-toolbar"></div>',
+            '<div style="float: right;"><div class="fixed-table-toolbar">',
             this.options.paginationVAlign === 'top' || this.options.paginationVAlign === 'both' ?
-                '<span class="fixed-table-pagination" style="clear: both;"></span>' :
+                '<span class="fixed-table-pagination" style="margin-top: 3px;display: inline-block"></span>' :
                 '',
-            '<div class="fixed-table-container">',
+            '</div></div><div class="fixed-table-container">',
             '<div class="fixed-table-header"><table></table></div>',
             '<div class="fixed-table-body">',
             '<div class="fixed-table-loading">',
@@ -1046,7 +1046,6 @@
         if (this.$toolbar.find('.bs-bars').children().length) {
             $('body').append($(this.options.toolbar));
         }
-        this.$toolbar.html('');
 
         if (typeof this.options.toolbar === 'string' || typeof this.options.toolbar === 'object') {
             $(sprintf('<div class="bs-bars pull-%s"></div>', this.options.toolbarAlign))
@@ -1055,7 +1054,7 @@
         }
 
         // showColumns, showToggle, showRefresh
-        html = [sprintf('<div class="columns columns-%s btn-group pull-%s">',
+        html = [sprintf('<span class="columns columns-%s btn-group pull-%s">',
             this.options.buttonsAlign, this.options.buttonsAlign)];
 
         if (typeof this.options.icons === 'string') {
@@ -1101,7 +1100,7 @@
                 ' dropdown-toggle" data-toggle="dropdown"> Columns',
                 ' <span class="caret"></span>',
                 '</button>',
-                '<ul class="dropdown-menu" role="menu"> <li class="dropdown-header"><input type="text" id="search-text" placeholder="Filter" /></li><li role="separator" class="divider"></li>');
+                '<ul class="dropdown-menu" role="menu"> <li class="dropdown-header"><input type="text" id="search-text" placeholder="Filter" style="border: 1px solid #ddd" /></li><li role="separator" class="divider"></li>');
 
             $.each(this.columns, function (i, column) {
                 if (column.radio || column.checkbox) {
@@ -1130,7 +1129,7 @@
                 '</div>');
         }
 
-        html.push('</div>');
+        html.push('</span>');
 
         // Fix #188: this.showToolbar is for extensions
         if (this.showToolbar || html.length > 2) {
@@ -1355,7 +1354,7 @@
             html.push('</div>',
                 '<div class="pull-' + this.options.paginationHAlign + ' pagination">',
                 '<ul class="pagination' + sprintf(' pagination-%s', this.options.iconSize) + '">',
-                '<li class="page-pre"><a href="#">' + this.options.paginationPreText + '</a></li>');
+                '<li class="page-pre"><a href="#" style="border: none;background: none; color:#333">' + this.options.paginationPreText + '</a></li>');
 
             if (this.totalPages < 5) {
                 from = 1;
@@ -1390,13 +1389,13 @@
             }
 
             html.push(
-                '<li class="page-next"><a href="#">' + this.options.paginationNextText + '</a></li>',
+                '<li class="page-next"><a href="#" style="border: none;background: none; color:#333">' + this.options.paginationNextText + '</a></li>',
                 '</ul>',
                 '</div>');
         }
 
         html.push(
-            '<div class="pull-' + this.options.paginationDetailHAlign + ' pagination-detail">',
+            '<div class="pull-' + this.options.paginationDetailHAlign + ' pagination-detail" style="margin-top: 7px;">',
             '<span class="pagination-info">',
             this.options.onlyInfoPagination ? this.options.formatDetailPagination(this.options.totalRows) :
             this.options.formatShowingRows(this.pageFrom, this.pageTo, this.options.totalRows),

@@ -1,4 +1,4 @@
-### Latest release (2017-02-22)
+### Latest release (2017-4-19)
 
 #### v1.11.1
 
@@ -33,3 +33,5 @@
 - feat(print extension): add print extension
 - feat(auto-refresh extension): add auto refresh extension
 - feat(tree-column extension): add tree column extension
+
+#
