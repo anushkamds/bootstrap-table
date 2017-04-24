@@ -1,4 +1,4 @@
-### Latest release (2017-4-20)
+### Latest release (2017-4-24)
 
 #### v1.11.1
 
