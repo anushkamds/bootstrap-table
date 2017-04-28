@@ -1100,7 +1100,7 @@
                 ' dropdown-toggle" data-toggle="dropdown"> Columns',
                 ' <span class="caret"></span>',
                 '</button>',
-                '<ul class="dropdown-menu" role="menu"> <li class="dropdown-header"><input type="text" id="' + sprintf('%s', this.options.classes.split(' ')[0]) + '" placeholder="Filter" style="border: 1px solid #ddd" /></li><li role="separator" class="divider"></li>');
+                '<ul class="dropdown-menu" role="menu" id="' + sprintf('%s', this.options.classes.split(' ')[0]) + '"> <li class="dropdown-header"><input type="text" placeholder="Filter" style="border: 1px solid #ddd" /></li><li role="separator" class="divider"></li>');
 
             $.each(this.columns, function (i, column) {
                 if (column.radio || column.checkbox) {
