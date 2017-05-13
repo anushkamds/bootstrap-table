@@ -25,8 +25,8 @@
         }
 
         var table = this.$tableBody.find('table'),
-            table_id = table.attr('id'),
-            header_id = table.attr('id') + '-sticky-header',
+            table_id = 'table-'+ that.options.tableKey,
+            header_id = 'table-'+ that.options.tableKey + '-sticky-header',
             sticky_header_container_id = header_id +'-sticky-header-container',
             anchor_begin_id = header_id +'_sticky_anchor_begin',
             anchor_end_id = header_id +'_sticky_anchor_end';
