@@ -288,6 +288,7 @@
         sortStable: false,
         striped: false,
         columns: [[]],
+        display: [[]],
         data: [],
         totalField: 'total',
         dataField: 'rows',
@@ -666,7 +667,9 @@
             this.options.columns = [this.options.columns];
         }
         this.options.columns = $.extend(true, [], columns, this.options.columns);
+        this.options.display = $.extend(true, [], columns, this.options.display);
         this.columns = [];
+
 
         setFieldIndex(this.options.columns);
         $.each(this.options.columns, function (i, columns) {
@@ -1102,18 +1105,17 @@
                 '</button>',
                 '<ul class="dropdown-menu" role="menu" id="' + sprintf('%s', this.options.classes.split(' ')[0]) + '"> <li class="dropdown-header"><input type="text" placeholder="Filter" style="border: 1px solid #ddd" /></li><li role="separator" class="divider"></li>');
 
-            $.each(this.columns, function (i, column) {
+            $.each(this.options.display, function (i, column) {
                 if (column.radio || column.checkbox) {
                     return;
                 }
 
-                if (that.options.cardView && !column.cardVisible) {
-                    return;
-                }
+                // if (that.options.cardView && !column.cardVisible) {
+                //     return;
+                // }
 
                 var checked = column.visible ? ' checked="checked"' : '';
 
-                if (column.switchable) {
                   if(column.columnHeader){
                     html.push(sprintf('<li role="separator" class="divider"></li><li class="dropdown-header">' +
                         '<label>%s</label>' +
@@ -1123,7 +1125,6 @@
                         '<label><input type="checkbox" data-field="%s" value="%s"%s> %s</label>' +
                         '</li>', column.field, i, checked, column.title));
                     switchableCount++;
-                }
             });
             html.push('</ul>',
                 '</div>');
