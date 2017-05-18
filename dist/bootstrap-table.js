@@ -1103,7 +1103,9 @@
                 ' dropdown-toggle" data-toggle="dropdown"> Columns',
                 ' <span class="caret"></span>',
                 '</button>',
-                '<ul class="dropdown-menu" role="menu" id="' + sprintf('%s', this.options.classes.split(' ')[0]) + '"> <li class="dropdown-header"><input type="text" placeholder="Filter" style="border: 1px solid #ddd" /></li><li role="separator" class="divider"></li>');
+                '<ul class="dropdown-menu" role="menu" id="' + sprintf('%s', this.options.classes.split(' ')[0]) + '"> <li class="dropdown-header"><input type="text" placeholder="Filter" style="border: 1px solid #ddd" />',
+                '<li class="dropdown-header no-result-cc" style="display: none">No records found</li>',
+                '</li><li role="separator" class="divider"></li>');
 
             $.each(this.options.display, function (i, column) {
                 if (column.radio || column.checkbox) {
