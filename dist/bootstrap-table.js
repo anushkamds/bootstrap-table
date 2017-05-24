@@ -432,6 +432,9 @@
         onSearch: function (text) {
             return false;
         },
+        myFunction: function(text){
+          return '';
+        },
         onToggle: function (cardView) {
             return false;
         },
@@ -1158,6 +1161,10 @@
 
         if (this.options.showColumns) {
             $keepOpen = this.$toolbar.find('.keep-open');
+            var $labels = this.$toolbar.find('li.menu-items-bs-table label');
+            var $catagories = this.$toolbar.find('li.dropdown-header label');
+            var $dividers = this.$toolbar.find('li.divider');
+            var $noResultCC = this.$toolbar.find('.no-result-cc');
 
             if (switchableCount <= this.options.minimumCountColumns) {
                 $keepOpen.find('input').prop('disabled', true);
@@ -1171,6 +1178,43 @@
 
                 that.toggleColumn($(this).val(), $this.prop('checked'), false);
                 that.trigger('column-switch', $(this).data('field'), $this.prop('checked'));
+            });
+
+            this.$toolbar.find('input[type=text]').on('keyup', function(event){
+                  var searchText = $($(event.currentTarget)).val().toLowerCase();
+                  var trueCount = 0;
+
+                  $labels.each(function(index, elm){
+                      var currentLiText = $(elm).text().toLowerCase(),
+                          showCurrentLi = currentLiText.indexOf(searchText) != -1;
+
+                      if (showCurrentLi) {
+                          trueCount++;
+                      }
+
+                      $(elm).toggle(showCurrentLi);
+                  });
+
+                  if (trueCount == 0) {
+                      $labels.each(function(index, elm) {
+                          $(elm).toggle(false);
+                      });
+                      $dividers.each(function(index, elm) {
+                          $(elm).toggle(false);
+                      });
+                      $catagories.each(function(index, elm) {
+                          $(elm).toggle(false);
+                      });
+                      $noResultCC.css({ display: '' });
+                  } else {
+                      $dividers.each(function(index, elm) {
+                          $(elm).css({ display: '' });
+                      });
+                      $catagories.each(function(index, elm) {
+                          $(elm).css({ display: '' });
+                      });
+                      $noResultCC.css({ display: 'none' });
+                  }
             });
         }
 
