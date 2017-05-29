@@ -1175,8 +1175,9 @@
             });
             $keepOpen.find('input').off('click').on('click', function () {
                 var $this = $(this);
+                var index = getFieldIndex(that.columns, $(this).data('field'));
 
-                that.toggleColumn($(this).val(), $this.prop('checked'), false);
+                that.toggleColumn(index, $this.prop('checked'), false);
                 that.trigger('column-switch', $(this).data('field'), $this.prop('checked'));
             });
 
