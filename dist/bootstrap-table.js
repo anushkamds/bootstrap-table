@@ -624,8 +624,8 @@
         this.$tableBody = this.$container.find('.fixed-table-body');
         this.$tableLoading = this.$container.find('.fixed-table-loading');
         this.$tableFooter = this.$container.find('.fixed-table-footer');
-        this.$toolbar = this.$container.find('.fixed-table-toolbar');
-        this.$pagination = this.$container.find('.fixed-table-pagination');
+        this.$toolbar = $('.'+this.options.classes).find('.fixed-table-toolbar');
+        this.$pagination = $('.'+this.options.classes).find('.fixed-table-pagination');
 
         this.$tableBody.append(this.$el);
         this.$container.after('<div class="clearfix"></div>');
@@ -1106,7 +1106,7 @@
                 ' dropdown-toggle" data-toggle="dropdown"> Columns',
                 ' <span class="caret"></span>',
                 '</button>',
-                '<ul class="dropdown-menu" role="menu" id="' + sprintf('%s', this.options.classes.split(' ')[0]) + '"> <li class="dropdown-header"><input type="text" placeholder="Filter" style="border: 1px solid #ddd" />',
+                '<ul class="dropdown-menu column-chooser-dropdown" role="menu" id="' + sprintf('%s', this.options.classes.split(' ')[0]) + '"> <li class="dropdown-header column-chooser-dropdown-search-field"><input type="text" placeholder="Filter" style="border: 1px solid #ddd" />',
                 '<li class="dropdown-header no-result-cc" style="display: none">No records found</li>',
                 '</li><li role="separator" class="divider"></li>');
 
@@ -1123,7 +1123,7 @@
 
                   if(column.columnHeader){
                     html.push(sprintf('<li role="separator" class="divider"></li><li class="dropdown-header">' +
-                        '<label>%s</label>' +
+                        '<label class="dropdown-label-title">%s</label>' +
                         '</li>', column.columnHeader));
                   }
                     html.push(sprintf('<li role="menuitem" class="menu-items-bs-table">' +
@@ -1400,7 +1400,7 @@
 
         if (!this.options.onlyInfoPagination) {
             html.push('</div>',
-                '<div class="pull-' + this.options.paginationHAlign + ' pagination">',
+                '<div class="pull-' + this.options.paginationHAlign + ' pagination column-chooser-pagination">',
                 '<ul class="pagination' + sprintf(' pagination-%s', this.options.iconSize) + '">',
                 '<li class="page-pre"><a href="#" style="border: none;background: none; color:#333">' + this.options.paginationPreText + '</a></li>');
 
@@ -1443,7 +1443,7 @@
         }
 
         html.push(
-            '<div class="pull-' + this.options.paginationDetailHAlign + ' pagination-detail" style="margin-top: 7px;">',
+            '<div class="pull-' + this.options.paginationDetailHAlign + ' pagination-detail" style="margin-top: 3px;">',
             '<span class="pagination-info">',
             this.options.onlyInfoPagination ? this.options.formatDetailPagination(this.options.totalRows) :
             this.options.formatShowingRows(this.pageFrom, this.pageTo, this.options.totalRows),
