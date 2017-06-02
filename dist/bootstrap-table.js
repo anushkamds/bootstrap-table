@@ -601,7 +601,7 @@
             '<div class="bootstrap-table">',
             '<div style="float: right;"><div class="fixed-table-toolbar">',
             this.options.paginationVAlign === 'top' || this.options.paginationVAlign === 'both' ?
-                '<span class="fixed-table-pagination" style="margin-top: 3px;display: inline-block"></span>' :
+                '<span class="fixed-table-pagination-non" style="margin-top: 3px;display: inline-block"></span>' :
                 '',
             '</div></div><div class="fixed-table-container">',
             '<div class="fixed-table-header"><table></table></div>',
@@ -612,7 +612,7 @@
             '</div>',
             '<div class="fixed-table-footer"><table><tr></tr></table></div>',
             this.options.paginationVAlign === 'bottom' || this.options.paginationVAlign === 'both' ?
-                '<div class="fixed-table-pagination"></div>' :
+                '<div class="fixed-table-pagination-non"></div>' :
                 '',
             '</div>',
             '</div>'
@@ -624,8 +624,8 @@
         this.$tableBody = this.$container.find('.fixed-table-body');
         this.$tableLoading = this.$container.find('.fixed-table-loading');
         this.$tableFooter = this.$container.find('.fixed-table-footer');
-        this.$toolbar = $('.'+this.options.classes).find('.fixed-table-toolbar');
-        this.$pagination = $('.'+this.options.classes).find('.fixed-table-pagination');
+        this.$toolbar = $('.'+this.options.classes + '-table-toolbar').find('.fixed-table-toolbar');
+        this.$pagination = $('.'+this.options.classes + '-table-toolbar').find('.fixed-table-pagination');
 
         this.$tableBody.append(this.$el);
         this.$container.after('<div class="clearfix"></div>');
