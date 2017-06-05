@@ -41,8 +41,7 @@
 .fixed-table-body {
     overflow-x: auto;
     overflow-y: auto;
-    height: 100%;
-    position: relative;
+    height: 100%
 }
 
 .fixed-table-container table {
@@ -132,7 +131,8 @@
 }
 
 .fixed-table-pagination div.pagination, .fixed-table-pagination .pagination-detail {
-
+    margin-top: 10px;
+    margin-bottom: 10px
 }
 
 .fixed-table-pagination div.pagination .pagination {
@@ -140,13 +140,13 @@
 }
 
 .fixed-table-pagination .pagination a {
-    padding: 6px 9px;
+    padding: 6px 12px;
     line-height: 1.428571429
 }
 
 .fixed-table-pagination .pagination-info {
-    margin-right: 10px;
-    margin-left: 10px;
+    line-height: 34px;
+    margin-right: 5px
 }
 
 .fixed-table-pagination .btn-group {
@@ -181,6 +181,8 @@
 
 .fixed-table-toolbar .bs-bars, .fixed-table-toolbar .search, .fixed-table-toolbar .columns {
     position: relative;
+    margin-top: 10px;
+    margin-bottom: 10px;
     line-height: 34px
 }
 
