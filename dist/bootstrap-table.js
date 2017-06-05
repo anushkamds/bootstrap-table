@@ -599,7 +599,7 @@
     BootstrapTable.prototype.initContainer = function () {
         this.$container = $([
             '<div class="bootstrap-table">',
-            '<div style="float: right;"><div class="fixed-table-toolbar">',
+            '<div style="float: right;"><div class="fixed-table-toolbar-non">',
             this.options.paginationVAlign === 'top' || this.options.paginationVAlign === 'both' ?
                 '<span class="fixed-table-pagination-non" style="margin-top: 3px;display: inline-block"></span>' :
                 '',
